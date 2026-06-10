@@ -34,5 +34,10 @@ class AuthService
         return compact('user', 'token');
     }
 
+    public function logout(User $user): void
+    {
+        $user->currentAccessToken()->delete();
+    }
+
 
 }
