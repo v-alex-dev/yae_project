@@ -13,4 +13,17 @@ use Illuminate\Http\Request;
 class AuthController extends Controller
 {
     //
+    public function __construct(private readonly AuthService $authService){}
+
+    public function register(RegisterRequest $request): JsonResponse
+    {
+        $result = $this->authService->register($request->validated());
+        return response()->json([
+            'message' => "User successfully registered",
+            'data' => [
+                'user' => new UserResource($result['user']),
+                'token' => $result['token']
+            ],
+        ],201);
+    }
 }
