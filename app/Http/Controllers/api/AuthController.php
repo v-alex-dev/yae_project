@@ -13,7 +13,9 @@ use Illuminate\Http\Request;
 class AuthController extends Controller
 {
     //
-    public function __construct(private readonly AuthService $authService){}
+    public function __construct(private readonly AuthService $authService)
+    {
+    }
 
     public function register(RegisterRequest $request): JsonResponse
     {
@@ -24,6 +26,19 @@ class AuthController extends Controller
                 'user' => new UserResource($result['user']),
                 'token' => $result['token']
             ],
-        ],201);
+        ], 201);
+    }
+
+    public function login(LoginRequest $request): JsonResponse
+    {
+        $result = $this->authService->login($request->validated());
+
+        return response()->json([
+            'message' => "User successfully logged in",
+            'data' => [
+                'user' => new UserResource($result['user']),
+                'token' => $result['token']
+            ]
+        ]);
     }
 }
