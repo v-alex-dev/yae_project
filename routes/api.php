@@ -17,3 +17,7 @@ Route::prefix('auth')->group(function () {
  * Protected Routes : Authentification required
  * Header format : Authorization: Bearer <token>
  */
+
+Route::middleware('auth:sanctum')->group(function () {
+    Route::post('/logout', [AuthController::class, 'logout']);
+});
