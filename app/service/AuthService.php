@@ -19,4 +19,20 @@ class AuthService
         $token = $user->createToken('auth_token')->plainTextToken;
         return compact('user', 'token');
     }
+
+    public function login(array $data): User
+    {
+        if (!Auth::attempt($data)) {
+            throw new AuthenticationException('Invalid credentials.');
+        }
+
+        $user = Auth::user();
+
+        $user->token()->delete();
+
+        $token = $user->createToken('auth_token')->plainTextToken;
+        return compact('user', 'token');
+    }
+
+
 }
