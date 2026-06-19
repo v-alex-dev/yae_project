@@ -13,14 +13,14 @@ class AuthService
         $user = User::create([
             'name' => $data['name'],
             'email' => $data['email'],
-            'password' => Hash::make($data['password']),
+            'password' => ($data['password']),
         ]);
 
         $token = $user->createToken('auth_token')->plainTextToken;
         return compact('user', 'token');
     }
 
-    public function login(array $data): User
+    public function login(array $data): array
     {
         if (!Auth::attempt($data)) {
             throw new AuthenticationException('Invalid credentials.');
@@ -28,7 +28,7 @@ class AuthService
 
         $user = Auth::user();
 
-        $user->token()->delete();
+        $user->tokens()->delete();
 
         $token = $user->createToken('auth_token')->plainTextToken;
         return compact('user', 'token');
